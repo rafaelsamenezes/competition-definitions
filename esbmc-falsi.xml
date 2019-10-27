@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 1.18//EN" "https://www.sosy-lab.org/benchexec/benchmark-1.18.dtd">
+<benchmark tool="esbmc" displayName="ESBMC-falsif" timelimit="15 min" memlimit="15 GB" cpuCores="8">
+
+  <require cpuModel="Intel Xeon E3-1230 v5 @ 3.40 GHz" cpuCores="8"/>
+
+  <resultfiles>**test-suite/*</resultfiles>
+
+  <option name="-s">falsi</option>
+
+  <rundefinition name="test-comp19_prop-coverage-error-call">
+    <propertyfile>/data/sv-benchmarks/c/properties/coverage-error-call.prp</propertyfile>
+  </rundefinition>
+
+
+  <tasks name="ReachSafety-Arrays">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-BitVectors">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-BitVectors.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-ControlFlow">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-ControlFlow.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-ECA">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-ECA.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-Floats">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Floats.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-Heap">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Heap.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-Loops">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Loops.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-Recursive">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Recursive.set</includesfile>
+  </tasks>
+  <tasks name="ReachSafety-Sequentialized">
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Sequentialized.set</includesfile>
+  </tasks>
+
+</benchmark>
+
