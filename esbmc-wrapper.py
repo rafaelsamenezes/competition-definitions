@@ -337,7 +337,7 @@ def run(cmd_line):
                         stderr=subprocess.PIPE)
     (stdout, stderr) = p.communicate()
 
-    print stdout
+    print stdout, stderr
 
     return stdout
 
@@ -592,7 +592,7 @@ result = verify(strategy, category_property, False)
 witness_file_name = os.path.basename(benchmark) + ".graphml"
 
 # Hacks for Jenkins Testcomp
-__testSuiteDir__ = benchmark + "-suite/"
+__testSuiteDir__ = os.path.basename(benchmark) + "-suite/"
 
 if not os.path.exists(__testSuiteDir__):
     os.mkdir(__testSuiteDir__)
