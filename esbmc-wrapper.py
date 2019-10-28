@@ -334,12 +334,10 @@ def run(cmd_line):
     the_args = shlex.split(cmd_line)
 
     p = subprocess.Popen(the_args, stdout=subprocess.PIPE,
-                         stderr=subprocess.PIPE)
+                        stderr=subprocess.PIPE)
     (stdout, stderr) = p.communicate()
 
-    """ DEBUG output
-  """
-    #print stdout
+    print stdout
 
     return stdout
 
@@ -603,6 +601,6 @@ createTestFile(witness_file_name, benchmark)
 command_to_run = "./tbf-testsuite-validator/bin/tbf-testsuite-validator --test-suite {} {}".format(__testSuiteDir__, benchmark)
 tbf_output = run(command_to_run)
 if "TRUE" in tbf_output:
-    print("done")
+    print("Done")
 else:
     print("unknown")
