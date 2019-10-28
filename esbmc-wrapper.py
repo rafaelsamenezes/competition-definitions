@@ -590,9 +590,20 @@ else:
     exit(1)
 
 result = verify(strategy, category_property, False)
-print get_result_string(result)
+#print get_result_string(result)
 witness_file_name = os.path.basename(benchmark) + ".graphml"
+
+# Hacks for Jenkins Testcomp
+__testSuiteDir__ = benchmark + "-suite/"
 
 if not os.path.exists(__testSuiteDir__):
     os.mkdir(__testSuiteDir__)
 createTestFile(witness_file_name, benchmark)
+
+print(benchmark)
+command_to_run = "./tbf-testsuite-validator/bin/tbf-testsuite-validator --test-suite {} {}".format(__testSuiteDir__, benchmark)
+tbf_output = run(command_to_run)
+if "TRUE" in tbf_output:
+    print("DONE")
+else:
+    print("Unknown")
