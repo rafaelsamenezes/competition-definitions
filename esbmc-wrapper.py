@@ -490,7 +490,7 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
 
     # Add strategy
     if strat == "kinduction":
-        command_line += "-bidirectional "
+        command_line += "--bidirectional "
     elif strat == "falsi":
         command_line += "--falsification "
     elif strat == "incr":
