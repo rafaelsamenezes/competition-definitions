@@ -152,6 +152,8 @@ class NonDeterministicCall(object):
         _, right = assumption.assumption.split("=")
         left, _ = right.split(";")
         assert(len(right) > 0)
+        if left[-1] == "f":
+            left = left[:-1]
         return NonDeterministicCall(left.strip())
 
     def debugInfo(self):
