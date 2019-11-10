@@ -603,7 +603,7 @@ createTestFile(witness_file_name, benchmark)
 # Generate zip folder
 run("zip -r {} {}".format(__testSuiteDir__ + ".zip", __testSuiteDir__))
 
-command_to_run = "./testcov/bin/testcov --no-isolation --no-plots --reduction BY_ORDER --test-suite {} --goal {} {}".format(__testSuiteDir__ + ".zip", property_file, benchmark)
+command_to_run = "python3 ./testcov/bin/testcov --no-isolation --no-plots --reduction BY_ORDER --test-suite {} --goal {} {}".format(__testSuiteDir__ + ".zip", property_file, benchmark)
 tbf_output = run(command_to_run)
 if "TRUE" in tbf_output:
     print("Done")
