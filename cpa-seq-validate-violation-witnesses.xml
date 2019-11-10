@@ -22,7 +22,7 @@
   <option name="-witness">../../results-verified/LOGDIR/${rundefinition_name}.${taskdef_name}/witness.graphml</option>
 
   <tasks name="ReachSafety-Arrays">
-    <includesfile>../sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
+    <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
   </tasks>
   <tasks name="ReachSafety-BitVectors">
