@@ -80,8 +80,8 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-memsafety">
-  <requiredfiles>../${taskdef_name}.graphml</requiredfiles>
-  <option name="-witness">../${taskdef_name}.graphml</option>
+  <requiredfiles>../${inputfile_name}.graphml</requiredfiles>
+  <option name="-witness">../${inputfile_name}.graphml</option>
 
   <tasks name="MemSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/MemSafety-Arrays.set</includesfile>
