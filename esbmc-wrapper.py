@@ -121,7 +121,7 @@ class MetadataParser(object):
             self.__openwitness__()
         graph = self.__xml__.find(
             __graph_tag__)
-        for node in graph:
+        for node in graph:            
             if(node.tag == __data_tag__):
                 self.metadata[node.attrib['key']] = node.text
 
@@ -226,7 +226,7 @@ class TestCompMetadataGenerator(object):
         # TODO: add support to enter function
         ET.SubElement(root, 'entryfunction').text = 'main'
         ET.SubElement(root, 'specification').text = property_file_content.strip()
-        properties = {'sourcecodelang', 'sourcecodelang', 
+        properties = {'sourcecodelang', 'sourcecodelang', 'producer',
                       'programfile', 'programhash', 'architecture', 'creationtime'}
         for property in properties:
             ET.SubElement(root, property).text = self.metadata[property]
@@ -594,13 +594,16 @@ result = verify(strategy, category_property, False)
 witness_file_name = os.path.basename(benchmark) + ".graphml"
 
 # Hacks for Jenkins Testcomp
-__testSuiteDir__ = os.path.basename(benchmark) + "-suite/"
+__testSuiteDir__ = os.path.basename(benchmark) + "-suite"
 
 if not os.path.exists(__testSuiteDir__):
     os.mkdir(__testSuiteDir__)
 createTestFile(witness_file_name, benchmark)
 
-command_to_run = "./tbf-testsuite-validator/bin/tbf-testsuite-validator --test-suite {} {}".format(__testSuiteDir__, benchmark)
+# Generate zip folder
+run("zip -r {} {}".format(__testSuiteDir__ + ".zip", __testSuiteDir__))
+
+command_to_run = "./testcov/bin/testcov --no-isolation --no-plots --reduction BY_ORDER --test-suite {} --goal {} {}".format(__testSuiteDir__ + ".zip", property_file, benchmark)
 tbf_output = run(command_to_run)
 if "TRUE" in tbf_output:
     print("Done")
