@@ -231,7 +231,7 @@ class TestCompMetadataGenerator(object):
         for property in properties:
             ET.SubElement(root, property).text = self.metadata[property]
         
-        output = __testSuiteDir__ + "metadata.xml"
+        output = __testSuiteDir__ + "/metadata.xml"
         ET.ElementTree(root).write(output)
         with open(output, 'r') as original: data = original.read()
         with open(output, 'w') as modified: modified.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE test-metadata PUBLIC "+//IDN sosy-lab.org//DTD test-format test-metadata 1.0//EN" "https://sosy-lab.org/test-format/test-metadata-1.0.dtd">' + data)
@@ -272,7 +272,7 @@ def __getNonDetAssumptions__(witness, source):
 
 def createTestFile(witness, source):
     assumptions = __getNonDetAssumptions__(witness, source)
-    TestCompGenerator(assumptions).writeTestCase(__testSuiteDir__ + "testcase.xml")
+    TestCompGenerator(assumptions).writeTestCase(__testSuiteDir__ + "/testcase.xml")
     metadataParser = MetadataParser(witness)
     metadataParser.parse()
     TestCompMetadataGenerator(metadataParser.metadata).writeMetadataFile()
