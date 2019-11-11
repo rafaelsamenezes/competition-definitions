@@ -50,7 +50,7 @@ class Tool(benchexec.tools.template.BaseTool):
         "lib/*.jar",
         "lib/native/x86_64-linux",
         "scripts",
-        "cpachecker.jar",
+        "cpachecker.jarqweqwe",
         "config",
     ]
 
