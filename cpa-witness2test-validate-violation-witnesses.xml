@@ -1,26 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 1.9//EN" "https://www.sosy-lab.org/benchexec/benchmark-1.9.dtd">
-<benchmark tool="cpachecker" timelimit="90 s" hardtimelimit="96 s" memlimit="7 GB" cpuCores="2">
+<benchmark tool="cpa-witness2test" timelimit="90 s" hardtimelimit="96 s" memlimit="7 GB" cpuCores="2">
 
 <require cpuModel="Intel Xeon E3-1230 v5 @ 3.40 GHz" cpuCores="2"/>
 
   <resultfiles>**.graphml</resultfiles>
 
-  <option name="-witnessValidation"/>
   <option name="-setprop">witness.checkProgramHash=false</option>
   <option name="-heap">5000m</option>
   <option name="-benchmark"/>
-  <option name="-setprop">cpa.predicate.memoryAllocationsAlwaysSucceed=true</option>
 
-  <option name="-setprop">cpa.smg.memoryAllocationFunctions=malloc,__kmalloc,kmalloc,kzalloc,kzalloc_node,ldv_zalloc,ldv_malloc</option>
-  <option name="-setprop">cpa.smg.arrayAllocationFunctions=calloc,kmalloc_array,kcalloc</option>
-  <option name="-setprop">cpa.smg.zeroingMemoryAllocation=calloc,kzalloc,kcalloc,kzalloc_node,ldv_zalloc</option>
-  <option name="-setprop">cpa.smg.deallocationFunctions=free,kfree,kfree_const</option>
+  <option name="-setprop">analysis.summaryEdges=true</option>
+  <option name="-setprop">cpa.callstack.skipVoidRecursion=true</option>
+  <option name="-setprop">cpa.callstack.skipFunctionPointerRecursion=true</option>
 
-  <rundefinition name="sv-comp20_prop-reachsafety">
-    <requiredfiles>./${taskdef_name}.graphml</requiredfiles>
-    <option name="-witness">./${taskdef_name}.graphml</option>
-
+<rundefinition name="sv-comp20_prop-reachsafety">
+  <requiredfiles>${taskdef_name}.graphml</requiredfiles>
+  <option name="-witness">./${taskdef_name}.graphml</option>
 
   <tasks name="ReachSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
@@ -63,11 +59,6 @@
     <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
   </tasks>
 
-  <tasks name="ConcurrencySafety-Main">
-    <includesfile>/data/sv-benchmarks/c/ConcurrencySafety-Main.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
-  </tasks>
-
   <tasks name="SoftwareSystems-AWS-C-Common-ReachSafety">
     <includesfile>/data/sv-benchmarks/c/SoftwareSystems-AWS-C-Common-ReachSafety.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
@@ -81,9 +72,8 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-memsafety">
-  <requiredfiles>./${taskdef_name}.graphml</requiredfiles>
+  <requiredfiles>${taskdef_name}.graphml</requiredfiles>
   <option name="-witness">./${taskdef_name}.graphml</option>
-
 
   <tasks name="MemSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/MemSafety-Arrays.set</includesfile>
@@ -106,10 +96,6 @@
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
     <option name="-64"/>
   </tasks>
-  <tasks name="MemSafety-MemCleanup">
-    <includesfile>/data/sv-benchmarks/c/MemSafety-MemCleanup.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/valid-memcleanup.prp</propertyfile>
-  </tasks>
 
   <tasks name="SoftwareSystems-BusyBox-MemSafety">
     <includesfile>/data/sv-benchmarks/c/SoftwareSystems-BusyBox-MemSafety.set</includesfile>
@@ -129,8 +115,7 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-nooverflow">
-
-  <requiredfiles>./${taskdef_name}.graphml</requiredfiles>
+  <requiredfiles>${taskdef_name}.graphml</requiredfiles>
   <option name="-witness">./${taskdef_name}.graphml</option>
 
   <tasks name="NoOverflows-BitVectors">
@@ -147,27 +132,6 @@
     <includesfile>/data/sv-benchmarks/c/SoftwareSystems-BusyBox-NoOverflows.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
     <option name="-64"/>
-  </tasks>
-</rundefinition>
-
-<rundefinition name="sv-comp20_prop-termination">
-
-  <requiredfiles>./${taskdef_name}.graphml</requiredfiles>
-  <option name="-witness">./${taskdef_name}.graphml</option>
-
-  <tasks name="Termination-MainControlFlow">
-    <includesfile>/data/sv-benchmarks/c/Termination-MainControlFlow.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/termination.prp</propertyfile>
-    <option name="-64"/>
-  </tasks>
-  <tasks name="Termination-MainHeap">
-    <includesfile>/data/sv-benchmarks/c/Termination-MainHeap.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/termination.prp</propertyfile>
-    <option name="-64"/>
-  </tasks>
-  <tasks name="Termination-Other">
-    <includesfile>/data/sv-benchmarks/c/Termination-Other.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/termination.prp</propertyfile>
   </tasks>
 </rundefinition>
 
