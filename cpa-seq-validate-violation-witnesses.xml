@@ -93,7 +93,7 @@
     <includesfile>/data/sv-benchmarks/c/MemSafety-LinkedLists.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
   </tasks>
-  <tasks ngame="MemSafety-Other">
+  <tasks name="MemSafety-Other">
 
     <includesfile>/data/sv-benchmarks/c/MemSafety-Other.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
