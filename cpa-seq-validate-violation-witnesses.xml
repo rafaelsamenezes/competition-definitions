@@ -93,8 +93,6 @@
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
   </tasks>
   <tasks name="MemSafety-Other">
-    <requiredfiles>../${inputfile_name}.graphml</requiredfiles>
-    <option name="-witness">../${inputfile_name}.graphml</option>
     <includesfile>/data/sv-benchmarks/c/MemSafety-Other.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
   </tasks>
