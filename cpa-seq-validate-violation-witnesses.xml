@@ -18,8 +18,6 @@
   <option name="-setprop">cpa.smg.deallocationFunctions=free,kfree,kfree_const</option>
 
 <rundefinition name="sv-comp20_prop-reachsafety">
-  <requiredfiles>../${taskdef_name}.graphml</requiredfiles>
-  <option name="-witness">../${taskdef_name}.graphml</option>
 
   <tasks name="ReachSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
@@ -80,8 +78,7 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-memsafety">
-  <requiredfiles>../${inputfile_name}.graphml</requiredfiles>
-  <option name="-witness">../${inputfile_name}.graphml</option>
+
 
   <tasks name="MemSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/MemSafety-Arrays.set</includesfile>
@@ -96,6 +93,8 @@
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
   </tasks>
   <tasks ngame="MemSafety-Other">
+    <requiredfiles>../${inputfile_name}.graphml</requiredfiles>
+    <option name="-witness">../${inputfile_name}.graphml</option>
     <includesfile>/data/sv-benchmarks/c/MemSafety-Other.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
   </tasks>
@@ -127,8 +126,6 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-nooverflow">
-  <requiredfiles>../${taskdef_name}.graphml</requiredfiles>
-  <option name="-witness">../${taskdef_name}.graphml</option>
 
   <tasks name="NoOverflows-BitVectors">
     <includesfile>/data/sv-benchmarks/c/NoOverflows-BitVectors.set</includesfile>
@@ -148,8 +145,6 @@
 </rundefinition>
 
 <rundefinition name="sv-comp20_prop-termination">
-  <requiredfiles>../${taskdef_name}.graphml</requiredfiles>
-  <option name="-witness">../${taskdef_name}.graphml</option>
 
   <tasks name="Termination-MainControlFlow">
     <includesfile>/data/sv-benchmarks/c/Termination-MainControlFlow.set</includesfile>
