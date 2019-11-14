@@ -90,8 +90,8 @@
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memcleanup.prp</propertyfile>
   </tasks>
 
-  <tasks name="Systems_BusyBox_MemSafety">
-    <includesfile>/data/sv-benchmarks/c/Systems_BusyBox_MemSafety.set</includesfile>
+  <tasks name="SoftwareSystems-BusyBox-MemSafety">
+    <includesfile>/data/sv-benchmarks/c/SoftwareSystems-BusyBox-MemSafety.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/valid-memsafety.prp</propertyfile>
     <option name="--arch">64</option>
   </tasks>
