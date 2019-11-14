@@ -120,8 +120,8 @@
   </tasks>
 
   <tasks name="SoftwareSystems-BusyBox-NoOverflows">
-    <includesfile>../sv-benchmarks/c/SoftwareSystems-BusyBox-NoOverflows.set</includesfile>
-    <propertyfile>../sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
+    <includesfile>/data/sv-benchmarks/c/SoftwareSystems-BusyBox-NoOverflows.set</includesfile>
+    <propertyfile>/data/sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
     <option name="--arch">64</option>
   </tasks>
 </rundefinition>
