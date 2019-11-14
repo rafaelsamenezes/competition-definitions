@@ -119,9 +119,9 @@
     <propertyfile>/data/sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
   </tasks>
 
-  <tasks name="Systems_BusyBox_NoOverflows">
-    <includesfile>/data/sv-benchmarks/c/Systems_BusyBox_NoOverflows.set</includesfile>
-    <propertyfile>/data/sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
+  <tasks name="SoftwareSystems-BusyBox-NoOverflows">
+    <includesfile>../sv-benchmarks/c/SoftwareSystems-BusyBox-NoOverflows.set</includesfile>
+    <propertyfile>../sv-benchmarks/c/properties/no-overflow.prp</propertyfile>
     <option name="--arch">64</option>
   </tasks>
 </rundefinition>
