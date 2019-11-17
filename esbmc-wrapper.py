@@ -508,7 +508,7 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
     elif prop == Property.memcleanup:
         command_line += "--memory-leak-check --no-assertions "
     elif prop == Property.reach:
-        command_line += "--no-pointer-check --no-bounds-check --interval-analysis --no-slice "
+        command_line += "--no-pointer-check --no-bounds-check --interval-analysis "
     else:
         print "Unknown property"
         exit(1)
