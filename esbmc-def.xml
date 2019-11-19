@@ -62,7 +62,7 @@
   </tasks>
 
   <tasks name="SoftwareSystems-DeviceDriversLinux64-ReachSafety">
-    <includesfile>/data/sv-benchmarks/c/SoftwareSystems-DeviceDriversLinux64-ReachSafety</includesfile>
+    <includesfile>/data/sv-benchmarks/c/SoftwareSystems-DeviceDriversLinux64-ReachSafety.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
     <option name="--arch">64</option>
   </tasks>
