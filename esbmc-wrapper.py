@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os.path  # To check if file exists
 import xml.etree.ElementTree as ET  # To parse XML
@@ -9,6 +9,8 @@ import subprocess
 import time
 import sys
 import resource
+import re
+
 # Start time for this script
 start_time = time.time()
 property_file_content = ""
@@ -121,7 +123,7 @@ class MetadataParser(object):
             self.__openwitness__()
         graph = self.__xml__.find(
             __graph_tag__)
-        for node in graph:
+        for node in graph:            
             if(node.tag == __data_tag__):
                 self.metadata[node.attrib['key']] = node.text
 
@@ -140,6 +142,28 @@ class NonDeterministicCall(object):
         self.value = value
 
     @staticmethod
+    def extract_byte_little_endian(value):
+        """
+        Converts an byte_extract_little_endian((unsigned int)%d, %d) into an value
+
+                Parameters
+        ----------
+        value : str
+            Nondeterministic assumption
+        """
+        PATTERN = 'byte_extract_little_endian\(\(unsigned int\)(.+), (.+)\)'
+        INT_BYTE_SIZE = 4
+        match = re.search(PATTERN, value)
+        if match == None:
+            return value
+        number = match.group(1)
+        index = match.group(2)
+
+        byte_value = (int(number)).to_bytes(INT_BYTE_SIZE, byteorder='little', signed=True)
+
+        return str(byte_value[int(index)])
+
+    @staticmethod
     def fromAssumptionHolder(assumption):
         """
         Converts an Assumption (that is nondet, this function will not verify this) into a NonDetermisticCall
@@ -152,9 +176,10 @@ class NonDeterministicCall(object):
         _, right = assumption.assumption.split("=")
         left, _ = right.split(";")
         assert(len(right) > 0)
-        if left[-1] == "f":
+        if left[-1] == "f" or left[-1] == "l":
             left = left[:-1]
-        return NonDeterministicCall(left.strip())
+        value = NonDeterministicCall.extract_byte_little_endian(left.strip())
+        return NonDeterministicCall(value)
 
     def debugInfo(self):
         print("Nondet call: {0}".format(self.value))
@@ -186,6 +211,18 @@ class SourceCodeChecker(object):
         """Open file in READ mode"""
         self.__lines__ = open(self.source, "r").readlines()
 
+    def __is_not_repeated__(self, i):
+        x = self.assumptions[i]
+        y = self.assumptions[i+1]
+
+        if x.line != y.line:
+            return True
+
+        _, x_right = x.assumption.split("=")
+        _, y_right = y.assumption.split("=")
+  
+        return x_right != y_right
+
     def __isNonDet__(self, assumption):
         """
             Checks if assumption is nondet by checking if line contains __VERIFIER_nondet
@@ -201,7 +238,12 @@ class SourceCodeChecker(object):
         # return right != ""
 
     def getNonDetAssumptions(self):
-        return [NonDeterministicCall.fromAssumptionHolder(x) for x in self.assumptions if self.__isNonDet__(x)]
+        filtered_assumptions = list()
+        for i in range(len(self.assumptions)-1):
+            if self.__is_not_repeated__(i):
+                filtered_assumptions.append(self.assumptions[i])
+        filtered_assumptions.append(self.assumptions[-1])
+        return [NonDeterministicCall.fromAssumptionHolder(x) for x in filtered_assumptions if self.__isNonDet__(x)]
 
     def debugInfo(self):
         for x in self.getNonDetAssumptions():
@@ -226,12 +268,12 @@ class TestCompMetadataGenerator(object):
         # TODO: add support to enter function
         ET.SubElement(root, 'entryfunction').text = 'main'
         ET.SubElement(root, 'specification').text = property_file_content.strip()
-        properties = {'sourcecodelang', 'sourcecodelang', 
+        properties = {'sourcecodelang', 'sourcecodelang', 'producer',
                       'programfile', 'programhash', 'architecture', 'creationtime'}
         for property in properties:
             ET.SubElement(root, property).text = self.metadata[property]
         
-        output = __testSuiteDir__ + "metadata.xml"
+        output = __testSuiteDir__ + "/metadata.xml"
         ET.ElementTree(root).write(output)
         with open(output, 'r') as original: data = original.read()
         with open(output, 'w') as modified: modified.write('<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE test-metadata PUBLIC "+//IDN sosy-lab.org//DTD test-format test-metadata 1.0//EN" "https://sosy-lab.org/test-format/test-metadata-1.0.dtd">' + data)
@@ -272,7 +314,7 @@ def __getNonDetAssumptions__(witness, source):
 
 def createTestFile(witness, source):
     assumptions = __getNonDetAssumptions__(witness, source)
-    TestCompGenerator(assumptions).writeTestCase(__testSuiteDir__ + "testcase.xml")
+    TestCompGenerator(assumptions).writeTestCase(__testSuiteDir__ + "/testcase.xml")
     metadataParser = MetadataParser(witness)
     metadataParser.parse()
     TestCompMetadataGenerator(metadataParser.metadata).writeMetadataFile()
@@ -330,8 +372,8 @@ class Property:
 
 
 def run(cmd_line):
-    print "Verifying with ESBMC"
-    print "Command: " + cmd_line
+    print ("Verifying with ESBMC")
+    print ("Command: " + cmd_line)
 
     the_args = shlex.split(cmd_line)
 
@@ -339,9 +381,8 @@ def run(cmd_line):
                         stderr=subprocess.PIPE)
     (stdout, stderr) = p.communicate()
 
-    print stdout, stderr
-
-    return stdout
+    print (stdout.decode(), stderr.decode())
+    return stdout.decode()
 
 
 def parse_result(the_output, prop):
@@ -465,7 +506,7 @@ esbmc_path = "./esbmc "
 # ESBMC default commands: this is the same for every submission
 esbmc_dargs = "--no-div-by-zero-check --force-malloc-success --state-hashing "
 esbmc_dargs += "--no-align-check --k-step 2 --floatbv --unlimited-k-steps "
-esbmc_dargs += "--context-bound 2 --no-slice "
+esbmc_dargs += "--context-bound 2 "
 
 
 def get_command_line(strat, prop, arch, benchmark, fp_mode):
@@ -498,7 +539,7 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
     elif strat == "incr":
         command_line += "--incremental-bmc "
     else:
-        print "Unknown strategy"
+        print ("Unknown strategy")
         exit(1)
 
     if prop == Property.overflow:
@@ -508,9 +549,9 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
     elif prop == Property.memcleanup:
         command_line += "--memory-leak-check --no-assertions "
     elif prop == Property.reach:
-        command_line += "--no-pointer-check --no-bounds-check --interval-analysis "
+        command_line += "--no-pointer-check --no-bounds-check --interval-analysis --no-slice "
     else:
-        print "Unknown property"
+        print ("Unknown property")
         exit(1)
 
     # if we're running in FP mode, use MathSAT
@@ -556,15 +597,15 @@ benchmark = args.benchmark
 strategy = args.strategy
 
 if version:
-    print os.popen(esbmc_path + "--version").read()[6:],
+    print (os.popen(esbmc_path + "--version").read()[6:]),
     exit(0)
 
 if property_file is None:
-    print "Please, specify a property file"
+    print ("Please, specify a property file")
     exit(1)
 
 if benchmark is None:
-    print "Please, specify a benchmark to verify"
+    print ("Please, specify a benchmark to verify")
     exit(1)
 
 # Parse property files
@@ -586,7 +627,7 @@ elif "COVER( init(main()), FQL(COVER EDGES(@DECISIONEDGE)) )" in property_file_c
     print("Unknown")
     exit(0)
 else:
-    print "Unsupported Property"
+    print ("Unsupported Property")
     exit(1)
 
 result = verify(strategy, category_property, False)
