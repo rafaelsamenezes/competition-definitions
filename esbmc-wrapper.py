@@ -227,12 +227,20 @@ class SourceCodeChecker(object):
         """
             Checks if assumption is nondet by checking if line contains __VERIFIER_nondet
         """
+
+        if "=" in assumption.assumption:
+            check_cast = assumption.assumption.split("=")
+            if len(check_cast) > 1:
+                if check_cast[1].startswith(" ( struct "):
+                    return False
+        
         if self.__lines__ is None:
             self.__openfile__()
         lineContent = self.__lines__[assumption.line - 1]
         # At first we do not care about variable name or nondet type
         # TODO: Add support to variable name
         # TODO: Add support to nondet type
+
         result = lineContent.split("__VERIFIER_nondet_")
         return len(result) > 1
         # return right != ""
