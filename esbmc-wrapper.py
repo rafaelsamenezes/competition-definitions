@@ -543,7 +543,8 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
     if strat == "kinduction":
         command_line += "--bidirectional "
     elif strat == "falsi":
-        command_line += "--falsification "
+        command_line += "--bidirectional --k-induction "
+        #command_line += "--falsification "
     elif strat == "incr":
         command_line += "--incremental-bmc "
     else:
