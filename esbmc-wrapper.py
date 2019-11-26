@@ -513,7 +513,7 @@ esbmc_path = "./esbmc "
 
 # ESBMC default commands: this is the same for every submission
 esbmc_dargs = "--no-div-by-zero-check --force-malloc-success --state-hashing "
-esbmc_dargs += "--no-align-check --k-step 2 --floatbv --unlimited-k-steps "
+esbmc_dargs += "--no-align-check --k-step 5 --floatbv --unlimited-k-steps "
 esbmc_dargs += "--context-bound 2 "
 
 
@@ -541,10 +541,9 @@ def get_command_line(strat, prop, arch, benchmark, fp_mode):
 
     # Add strategy
     if strat == "kinduction":
-        command_line += "--bidirectional "
-    elif strat == "falsi":
         command_line += "--bidirectional --k-induction "
-        #command_line += "--falsification "
+    elif strat == "falsi":
+        command_line += "--falsification "
     elif strat == "incr":
         command_line += "--incremental-bmc "
     else:
