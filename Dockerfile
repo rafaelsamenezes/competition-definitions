@@ -20,8 +20,10 @@ RUN dpkg --add-architecture i386 \
 RUN cp /etc/sudoers /etc/sudoers.bak && \
     echo 'jenkins  ALL=(root) NOPASSWD: ALL' >> /etc/sudoers && \
     mkdir /data && cd /data && pwd && \
-    git clone --depth 1 https://github.com/sosy-lab/sv-benchmarks.git
-
+    wget https://github.com/sosy-lab/sv-benchmarks/archive/svcomp20-freeze.tar.gz && \
+    tar xf svcomp20-freeze.tar.gz && rm svcomp20-freeze.tar.gz && \
+    rm -rf sv-benchmarks-svcomp20-freeze/clauses/ && \
+    rm -rf rm -rf sv-benchmarks-svcomp20-freeze/java && mv sv-benchmarks-svcomp20-freeze sv-benchmarks
 
 ###################################
 # jenkins user
