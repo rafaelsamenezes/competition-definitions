@@ -33,11 +33,16 @@ PROPERTY_ARRAY_BOUND_VIOLATED_TAG="array bounds violated"
 PROPERTY_ACCESS_OUT_TAG="dereference failure: Access to object out of bounds"
 PROPERTY_INVALID_OBJECT_TAG="dereference failure: invalidated dynamic object"
 PROPERTY_NULL_POINTER_TAG="dereference failure: NULL pointer"
+PROPERTY_FREE_OFFSET_TAG="Operand of free must have zero pointer offset"
+PROPERTY_FREE_ERROR_TAG="dereference failure: free() of non-dynamic memory"
+PROPERTY_INVALID_OBJECT_FREE_TAG="dereference failure: invalidated dynamic object freed"
+PROPERTY_INVALID_PORINTER_FREE_TAG="dereference failure: invalid pointer freed"
 #PROPERTY_UNWIND_ASSERTION_LOOP_TAG="unwinding assertion loop" #É verificado dentro do DepthK, se for esse tipo, então o resultado é unknown.
 
 # MEMSAFETY properties pattern
 BENCHMARK_FALSE_VALID_MEMTRACK=${PROPERTY_FORGOTTEN_MEMORY_TAG}
 BENCHMARK_FALSE_VALID_DEREF="(\|${PROPERTY_INVALID_POINTER_TAG}\|${PROPERTY_ARRAY_BOUND_VIOLATED_TAG}\|${PROPERTY_NULL_POINTER_TAG}\|${PROPERTY_ACCESS_OUT_TAG}\|${PROPERTY_INVALID_OBJECT_TAG}\|)"
+BENCHMARK_FALSE_VALID_FREE="(\|${PROPERTY_FREE_OFFSET_TAG}\|${PROPERTY_FREE_ERROR_TAG}\|${PROPERTY_INVALID_OBJECT_FREE_TAG}\|${PROPERTY_INVALID_PORINTER_FREE_TAG}\|)"
 
 # Benchmark result controlling flags
 IS_MEMSAFETY_BENCHMARK=0
@@ -97,7 +102,7 @@ exit
 	t) 		
 		echo ""
 		prpfile="$getpwd/samples/ALL.prp"
-		opt_test="--debug --force-check-base-case --solver z3 --memlimit 15g --prp $prpfile  --extra-option-esbmc=\"--floatbv --no-bounds-check --no-pointer-check --no-div-by-zero-check --error-label ERROR\""
+		opt_test="--debug --force-check-base-case --solver z3 --memlimit 15g --prp $prpfile  --extra-option-esbmc=\"--floatbv --no-bounds-check --no-pointer-check --no-div-by-zero-check \""
 		run_test="${path_to_depthk} $opt_test $getpwd/samples/example1_true-unreach-call.c"
 		result_check=$(timeout 895 bash -c "$run_test")
 		echo "$result_check"
@@ -133,19 +138,19 @@ fi
 depthk_options=""
 if test ${parallel} = 1; then
   if test ${do_memsafety} = 0; then
-    depthk_options=" -g --force-check-base-case --k-induction-parallel --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-bounds-check --no-pointer-check --no-div-by-zero-check --error-label ERROR\""    
+    depthk_options=" -g --force-check-base-case --k-induction-parallel --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-bounds-check --no-pointer-check --no-div-by-zero-check --no-assertions\""    
   else
     depthk_options=" -g --force-check-base-case --k-induction-parallel --solver z3 --memlimit 14g --prp "$property_list" --memory-leak-check --extra-option-esbmc=\"--floatbv --error-label ERROR\""    
   fi
 else
     if test ${do_term} = 1; then
-	    depthk_options=" -g --force-check-base-case --solver z3 --termination-category --memlimit 14g  --prp "$property_list" --extra-option-esbmc=\"--floatbv --no-bounds-check --no-pointer-check --no-div-by-zero-check   -DLDV_ERROR=ERROR  -D_Bool=int -Dassert=notassert --error-label ERROR\""
+	    depthk_options=" -g --force-check-base-case --solver z3 --termination-category --memlimit 14g  --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --no-assertions\""
 	elif test ${do_overflow} = 1; then
-	    depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --overflow-check --prp "$property_list"  --extra-option-esbmc=\"--floatbv --no-bounds-check --no-pointer-check --no-div-by-zero-check --force-malloc-success --context-bound 7 -Dldv_assume=__ESBMC_assume -D__VERIFIER_error=ESBMC_error  \""
+	    depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --overflow-check --prp "$property_list"  --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --overflow-check --no-assertions\""
     elif test ${do_memsafety} = 0; then
-        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--floatbv --force-malloc-success --context-bound 7 --no-bounds-check --no-pointer-check --no-div-by-zero-check -Dldv_assume=__ESBMC_assume  --error-label ERROR\""
+        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --memory-leak-check --no-assertions\""
     else
-        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --memory-safety-category --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --context-bound 7 -Dldv_assume=__ESBMC_assume --floatbv --memory-leak-check -D__VERIFIER_error=ESBMC_error  \""
+        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --memory-safety-category --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check\""
     fi
 fi
 
@@ -166,7 +171,7 @@ echo "$run_cmdline"
 #exit
 # Invoke our command, wrapped in a timeout so that we can
 # postprocess the results. `timeout` is part of coreutils on debian and fedora.
-result_check=$(timeout 895 bash -c "$run_cmdline")
+result_check=$(bash -c "$run_cmdline")
 
 echo "${result_check}"
 
@@ -176,11 +181,16 @@ if test ${IS_MEMSAFETY_BENCHMARK} = 1; then
 
    false_valid_mamtrack=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_MEMTRACK}")
    false_valid_deref=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_DEREF}")
+   false_valid_free=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_FREE}")
+
+   echo 
 
    if [ "$false_valid_mamtrack" -gt 0 ]; then
       VPROP=$"(valid-memtrack)"
    elif [ "${false_valid_deref}" -gt 0 ]; then
       VPROP=$"(valid-deref)"
+   elif [ "${false_valid_free}" -gt 0 ]; then
+      VPROP=$"(valid-free)"
    fi
 elif test ${do_overflow} = 1; then
     VPROP=$"(no-overflow)"
