@@ -144,13 +144,13 @@ if test ${parallel} = 1; then
   fi
 else
     if test ${do_term} = 1; then
-	    depthk_options=" -g --force-check-base-case --solver z3 --termination-category --memlimit 14g  --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --no-assertions\""
-	elif test ${do_overflow} = 1; then
-	    depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --overflow-check --prp "$property_list"  --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --overflow-check --no-assertions\""
-    elif test ${do_memsafety} = 0; then
-        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --memory-leak-check --no-assertions\""
+	depthk_options=" -g -y --force-check-base-case --solver z3 --termination-category --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --no-assertions\""
+    elif test ${do_overflow} = 1; then
+	depthk_options=" -g -w --force-check-base-case --solver z3 --memlimit 14g --overflow-check --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check --overflow-check --no-assertions\""
+    elif test ${do_memsafety} = 1; then
+        depthk_options=" -g -x --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --memory-leak-check --no-assertions\""
     else
-        depthk_options=" -g --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --memory-safety-category --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check\""
+        depthk_options=" --force-check-base-case --solver z3 --memlimit 14g --prp "$property_list" --memory-safety-category --extra-option-esbmc=\"--no-div-by-zero-check --force-malloc-success --state-hashing --no-align-check --floatbv --context-bound 2 --no-pointer-check --no-bounds-check\""
     fi
 fi
 
@@ -173,7 +173,7 @@ echo "$run_cmdline"
 # postprocess the results. `timeout` is part of coreutils on debian and fedora.
 result_check=$(bash -c "$run_cmdline")
 
-echo "${result_check}"
+#echo "${result_check}"
 
 VPROP=$""
 
@@ -182,8 +182,6 @@ if test ${IS_MEMSAFETY_BENCHMARK} = 1; then
    false_valid_mamtrack=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_MEMTRACK}")
    false_valid_deref=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_DEREF}")
    false_valid_free=$(echo "${result_check}" |grep -c "${BENCHMARK_FALSE_VALID_FREE}")
-
-   echo 
 
    if [ "$false_valid_mamtrack" -gt 0 ]; then
       VPROP=$"(valid-memtrack)"
