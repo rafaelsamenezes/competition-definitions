@@ -29,8 +29,6 @@
   <tasks name="ReachSafety-Floats">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Floats.set</includesfile>
     <propertyfile>/data/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
-    <option name=" --floatbv"</option>
-    <option name=" --boolector"</option>
   </tasks>
   <tasks name="ReachSafety-Heap">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Heap.set</includesfile>
