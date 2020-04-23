@@ -6,7 +6,7 @@
 
   <resultfiles>**.graphml</resultfiles>
   
-  <option name="-s">incr</option>
+  <option name="-s">kinduction</option>
   
 
 <rundefinition name="sv-comp19_prop-reachsafety">
