@@ -6,7 +6,7 @@
 
   <resultfiles>**.graphml</resultfiles>
   
-  <option name="-s">inc</option>
+  <option name="-s">incr</option>
   
 
 <rundefinition name="sv-comp19_prop-reachsafety">
