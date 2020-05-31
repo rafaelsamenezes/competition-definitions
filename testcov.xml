@@ -18,8 +18,8 @@
   <option name="--reduction-output">test-suite</option>
 
   <rundefinition name="test-comp20_prop-coverage-error-call">
-    <requiredfiles>/results-verified/${rundefinition_name}/${benchmark_name}/result-verified/test-suite.zip</requiredfiles>
-    <option name="--test-suite">/results-verified/${rundefinition_name}/${benchmark_name}/result-verified/test-suite.zip</option>
+    <requiredfiles>/results-verified/${rundefinition_name}/${benchmark_file}/result-verified/test-suite.zip</requiredfiles>
+    <option name="--test-suite">/results-verified/${rundefinition_name}/${benchmark_file}/result-verified/test-suite.zip</option>
     <propertyfile>/data/sv-benchmarks/c/properties/coverage-error-call.prp</propertyfile>
   </rundefinition>
 
