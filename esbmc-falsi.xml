@@ -4,7 +4,7 @@
 
   <require cpuModel="Intel Xeon E3-1230 v5 @ 3.40 GHz" cpuCores="8"/>
 
-  <resultfiles>/</resultfiles>
+  <resultfiles>/result-verified</resultfiles>
 
   <option name="-s">falsi</option>
 
@@ -12,6 +12,9 @@
     <propertyfile>/data/sv-benchmarks/c/properties/coverage-branches.prp</propertyfile>
   </rundefinition>
 
+  <rundefinition name="test-comp20_prop-coverage-error-call">
+    <propertyfile>../sv-benchmarks/c/properties/coverage-error-call.prp</propertyfile>
+  </rundefinition>
 
   <tasks name="ReachSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
