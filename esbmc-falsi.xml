@@ -6,7 +6,7 @@
 
   <resultfiles>/result-verified</resultfiles>
 
-  <option name="-s">falsi</option>
+  <option name="-s">incr</option>
 
   <rundefinition name="test-comp20_prop-coverage-branches">
     <propertyfile>/data/sv-benchmarks/c/properties/coverage-branches.prp</propertyfile>
