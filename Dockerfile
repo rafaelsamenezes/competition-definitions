@@ -10,7 +10,7 @@ USER root
 # Core Packages
 RUN dpkg --add-architecture i386 \
     && apt-get update \
-    && apt-get install -y python3-pip unzip python3-lxml python wget sudo git \
+    && apt-get install -y python3-pip unzip python3-lxml python wget sudo git build-essential gcc-multilib ggcov \
     && pip3 install git+https://github.com/sosy-lab/benchexec.git coloredlogs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
