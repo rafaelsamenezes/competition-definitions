@@ -16,7 +16,6 @@
   </rundefinition>
 
   <!--rundefinition name="test-comp20_prop-coverage-error-call"-->
-  
    	<!--option name="--zip_path">./results-verified/${rundefinition_name}/${taskdef_name}/result-verified/test-suite.zip</option -->
     <!--propertyfile>/data/sv-benchmarks/c/properties/coverage-error-call.prp</propertyfile-->
   <!--/rundefinition-->
