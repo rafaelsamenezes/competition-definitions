@@ -26,7 +26,6 @@
     <propertyfile>/data/sv-benchmarks/c/properties/coverage-branches.prp</propertyfile>
   </rundefinition>
 
-
   <tasks name="ReachSafety-Arrays">
     <includesfile>/data/sv-benchmarks/c/ReachSafety-Arrays.set</includesfile>
   </tasks>
