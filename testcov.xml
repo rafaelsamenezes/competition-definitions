@@ -6,6 +6,9 @@
 
   <resultfiles>**output/**</resultfiles>
   
+  <option name="--no-runexec"/>
+  <option name="--no-isolation"/>  
+  
   <!-- Limits per individual test run -->
   <option name="--memlimit">6GB</option>
   <option name="--timelimit-per-run">3</option> <!-- seconds -->
